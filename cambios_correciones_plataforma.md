@@ -16,6 +16,7 @@ De acá nacen otras vistas para la administración de otros administradores.
 
 Funciona solo a la hora de registrar al administrador y cambia a Active al administrador establecer su contraseña en el enlace de activación.
 
+
 ## Puntos abiertos
 
 ***PA-04***

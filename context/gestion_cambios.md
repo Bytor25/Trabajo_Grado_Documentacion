@@ -6,8 +6,8 @@ Registro de los cambios que se hacen en los documentos del proyecto, con su orig
 
 | Documento | Contenido | Versión vigente |
 |-----------|-----------|:---------------:|
-| [contextualizacion.md](contextualizacion.md) | Contexto, objetivos, alcance, interesados, ciclo de vida, costos, riesgos y pendientes de contexto (`PC-xx`). | 8 |
-| [plataforma_web_descripcion.md](plataforma_web_descripcion.md) | Especificación funcional: vistas (`V-xx`), componentes (`C-xx`), requisitos (`RF`), reglas de negocio (`RN`), requisitos no funcionales (`RNF`) y puntos abiertos (`PA-xx`). | 4 |
+| [contextualizacion.md](contextualizacion.md) | Contexto, objetivos, alcance, interesados, ciclo de vida, costos, riesgos y pendientes de contexto (`PC-xx`). | 11 |
+| [plataforma_web_descripcion.md](plataforma_web_descripcion.md) | Especificación funcional: vistas (`V-xx`), componentes (`C-xx`), requisitos (`RF`), reglas de negocio (`RN`), requisitos no funcionales (`RNF`) y puntos abiertos (`PA-xx`). | 6 |
 
 El historial anterior a estas versiones está en la sección *Control de cambios* de cada documento.
 
@@ -504,3 +504,198 @@ Respuestas propuestas a las dudas que el acta deja abiertas (*Por aclarar*). Se 
 |---|---------|------|--------|--------|
 | 1 | 5. Ciclo de vida | Modificado | "iteraciones de una semana (propuesto)" → "Sprints de una semana y Releases cada dos Sprints". | I-28 |
 | 2 | 9. Pendientes `PC-21` | Modificado | **Parcialmente resuelto:** Product Owner único, épicas por objetivo, Features como funcionalidades validables y repositorio privado en Azure Repos; falta validar con el director. | D-44 a D-46, I-30 |
+
+---
+
+## GC-007 — 2026-10-27 — Correcciones a la reunión del 19/10 y reunión del 26/10
+
+**Origen:** correcciones de los estudiantes a [Reunión 191026.md](reuniones/Reunión%20191026.md) (`PC-02`, `PC-07`, `PC-09`, `PC-10`, `PC-17`, `PC-18`) y respuestas de [Reunión 261026.md](reuniones/Reunión%20261026.md) (`PCAL-xx`) sobre [requerimientos_modulo_calibracion.md](requerimientos_modulo_calibracion.md).
+**Versiones:** contextualizacion.md 8 → 9. En plataforma_web_descripcion.md solo se ajustan la sección 2.3 y `PA-04` (sin cambio de versión).
+
+### Decisiones
+
+| # | Decisión |
+|---|----------|
+| D-47 | **Marca de tiempo:** los formatos admitidos dependen del reloj de las estaciones. Si la marca no se puede interpretar o está desajustada, la lectura se guarda con la hora de recepción y se marca como corregida. Una sola alerta por episodio, que se mantiene hasta que se corrija en la estación. |
+| D-48 | **Desconexión:** 10 minutos sin mensajes. El servidor mide los huecos y la desconexión con la hora de llegada. |
+| D-49 | **Unidades** de las variables actuales validadas (`PA-04`). |
+| D-50 | **JSON y códigos de error:** la estructura del JSON aún se debe definir; los códigos de error de los sensores se definirán con una matriz de valores y umbrales. Cada estación puede tener su propio formato JSON. |
+| D-51 | **Cuenta del proyecto:** monitoringiotsystemuco@gmail.com, con la que se crean los servicios; se entrega con la plataforma. Los estudiantes agendan la reunión con Juan Camilo. Los costos se definen al validar los servicios. |
+| D-52 | **Referencia para calibrar:** no se marca ninguna estación como referencia; las estaciones no tienen que estar en el mismo lugar; se calibra con 2 o más estaciones; emparejamiento por promedios por minuto; la estación casera envía por MQTT y se registra como estación. La calidad de la referencia la decide el investigador (nota de riesgo). |
+| D-53 | **Módulo de calibración** (`PCAL-01` a `PCAL-14`): solo administradores; solo muestra gráficas con el R² de los datos calibrados, sin valor de aceptación; el modelo elegido se descarga en `.keras` y no se aplica a los datos; el público ve solo datos crudos; sin historial; modelos: regresión lineal, ANN, Random Forest, SVM, AdaBoost y regresión polinomial (ElasticNet por revisar). |
+
+### Interpretaciones y decisiones derivadas
+
+| # | Interpretación | Dónde queda pendiente |
+|---|----------------|-----------------------|
+| I-31 | El objetivo específico 4 se redacta sin "validación en campo (co-ubicación)", sin estimación de variables y sin la selección automática por costo computacional, porque no aparecen en el documento de analítica ni en la reunión del 26/10. El objetivo 2 del macroproyecto sí menciona la co-ubicación. | `PC-10`, `PC-18` |
+| I-32 | `.keras` solo sirve para redes neuronales; los demás modelos necesitan otro formato. | `PC-18` |
+| I-33 | Con estaciones en lugares distintos y sin referencia fija, el riesgo `RG-11` pasa a ser un riesgo que asume el investigador. | `RG-11` |
+| I-34 | La diferencia tolerada para considerar una marca desajustada no está definida. | `PC-02` |
+
+### Cambios en contextualizacion.md (versión 8 → 9)
+
+| # | Sección | Tipo | Cambio | Motivo |
+|---|---------|------|--------|--------|
+| 1 | 1.1 Participación | Modificado | Sistemas: módulo de calibración y descarga del modelo; estimación por confirmar. Ambiental interpreta (no valida) la calibración. | D-52, D-53 |
+| 2 | 1.4 Estaciones | Modificado | Unidades validadas, formato JSON por estación, matriz de códigos de error, validación de la marca de tiempo sin la marca de propuesto, desconexión de 10 minutos medida por el servidor. | D-47 a D-50 |
+| 3 | 1.5 Módulo de calibración | Agregado | Funcionamiento definido del módulo y nota de riesgo sobre la calidad de la referencia. | D-52, D-53 |
+| 4 | 2.2 Objetivo 4 y sugerencias | Modificado | Nueva redacción del objetivo 4 y sugerencias sobre la co-ubicación y la estimación. | I-31 |
+| 5 | 2.3 Trazabilidad | Modificado | Estado de los objetivos 2 y 4, y vistas de la especificación desactualizadas (V-29 a V-32, `RN-31`). | D-47 a D-53 |
+| 6 | 3.1 Incluye | Modificado | Validación de datos y huecos; módulo de calibración reescrito; validación de modelos marcada como propuesta; entrega de la cuenta del proyecto. | D-47, D-48, D-51, D-53 |
+| 7 | 3.2 No incluye | Agregado | Validar la calidad de la referencia, aplicar los modelos a los datos, mostrar datos calibrados, guardar historial o modelos, usar el modelo descargado fuera de la plataforma. | D-52, D-53 |
+| 8 | 3.3 Supuestos | Modificado / Agregado | `S-05`, `S-11` y `S-12` modificados; `S-13` agregado (estaciones caseras por MQTT). | D-50, D-52 |
+| 9 | 3.4 Restricciones | Modificado | `R-06`: la calibración depende de datos de 2 o más estaciones y de los pendientes de `PC-18`. | D-52 |
+| 10 | 4. Interesados | Modificado | Investigador principal decide los datos de calibración; administradores descargan modelos; los estudiantes agendan con Juan Camilo. | D-51 a D-53 |
+| 11 | 5. Priorización | Modificado | Punto 5 adaptado al módulo de calibración. | D-53 |
+| 12 | 6. Criterios de éxito | Modificado | Criterios 2 y 4. | D-47, D-48, D-53 |
+| 13 | 7. Costos y stack | Modificado | Almacenamiento de modelos, cuenta del proyecto y bibliotecas de aprendizaje automático. | D-51, D-53, I-32 |
+| 14 | 8. Riesgos | Modificado | `RG-10`, `RG-11`, `RG-13` y `RG-17`. | D-50 a D-53, I-33 |
+| 15 | 9. Pendientes | Modificado | `PC-02`, `PC-07`, `PC-09`, `PC-10`, `PC-17`, `PC-18`, `PC-19` y `PC-22`; sección 9.1 actualizada (`PA-04` resuelto). | D-47 a D-53 |
+| 16 | 10. Sugerencias | Modificado | Sugerencias 1 a 4 y 6. | D-50 a D-53 |
+| 17 | 11. Glosario | Modificado / Agregado | Estación de referencia, desconexión, hueco, contrato de integración, co-ubicación y estimación modificados; estación casera, lectura corregida, variable auxiliar y R² agregados. | D-47 a D-53 |
+
+### Cambios en plataforma_web_descripcion.md
+
+| # | Sección | Tipo | Cambio | Motivo |
+|---|---------|------|--------|--------|
+| 1 | 2.3 Sensores y variables | Modificado | La columna de unidades pasa de "por confirmar" a "validada". | D-49 |
+| 2 | 7. `PA-04` | Modificado | **Resuelto.** | D-49 |
+
+### Pendientes
+
+- **Especificación (pendiente de actualizar):** V-27 y `RN-29` (formato por estación, validación de la marca de tiempo); `PA-31` (10 minutos); `PA-50` (formato variable por estación); V-29 a V-32, `RN-31`, `PA-52` a `PA-55` (módulo de calibración según `PCAL-xx`).
+- `PC-02`: formatos de marca de tiempo, tolerancia de desajuste, estructura del JSON y matriz de códigos de error.
+- `PC-17` / `PC-18`: modelos mínimos, ElasticNet y XGBoost, formato de los modelos que no son redes neuronales, uso del modelo descargado, estimación de variables, valor p y datos para el R².
+- `PC-10`: confirmar con el investigador que el objetivo 4 no incluye la co-ubicación.
+
+---
+
+## GC-008 — 2026-10-27 — Alineación de la especificación con la contextualización
+
+**Origen:** revisión de [plataforma_web_descripcion.md](plataforma_web_descripcion.md) frente a [contextualizacion.md](contextualizacion.md) (versión 9) y a las decisiones de `GC-005` y `GC-007`. No hay decisiones nuevas: se incorporan a la especificación las que ya estaban tomadas.
+**Versiones:** plataforma_web_descripcion.md 4 → 5; contextualizacion.md 9 → 10.
+
+### Interpretaciones y decisiones derivadas
+
+| # | Interpretación | Dónde queda pendiente |
+|---|----------------|-----------------------|
+| I-35 | Con un formato por estación, V-27 pasa a administrar formatos con nombre que se asignan a las estaciones; un formato puede compartirse (por ejemplo, un formato base para la primera fase). | `PA-50` |
+| I-36 | Se retiran V-29 (no hay fuentes externas ni estaciones marcadas como referencia) y V-32 (no se guardan modelos ni se aplican). La selección de estaciones pasa a V-30. | — |
+| I-37 | Los estados de las estaciones se conservan para el listado, el detalle y el resumen; el color del mapa depende de los umbrales. El gris de *Inactive* puede confundirse con el gris de "sin datos". | `PA-56` |
+| I-38 | `RNF-05` decía "zona horaria local del usuario", en contradicción con `R-09` (zona horaria de Colombia); se alinea con `R-09`. | — |
+| I-39 | Mientras no exista la matriz de códigos de error, se conserva `-1` como referencia del estado *Offline*. | `PA-32` |
+
+### Cambios en plataforma_web_descripcion.md (versión 4 → 5)
+
+| # | Sección | Tipo | Cambio | Motivo |
+|---|---------|------|--------|--------|
+| 1 | Convenciones, 1.1, 1.2, 1.3 | Modificado | *(preliminar)* remite a los requisitos recibidos; nombre a cargo del equipo; rol administrador con el módulo de calibración; mapa de navegación sin V-29 ni V-32. | D-43, D-53, I-36 |
+| 2 | 2.2 Estados de las estaciones | Modificado / Agregado | *Error* por desconexión de 10 minutos; nota sobre estado frente a color del mapa. | D-42, D-48, I-37 |
+| 3 | 2.4 Estados de los sensores | Modificado | *Offline* por código de error según la matriz por definir. | D-50, I-39 |
+| 4 | 2.6 Alertas | Modificado / Agregado | *Tiempo sin conexión* con 10 minutos; nuevo tipo *Marca de tiempo inválida* con una alerta por episodio. | D-47, D-48 |
+| 5 | 2.8 | Modificado | Pasa a *Módulo de calibración*: datos de referencia, modelos, resultados, uso de los modelos y nota de riesgo. | D-52, D-53 |
+| 6 | `C-09`, `C-11`, `RF-G03` | Modificado | Submenú sin V-29 ni V-32; `C-11` con una gráfica por modelo, R² y descarga. | D-53, I-36 |
+| 7 | V-02 (`RF-11`, `RF-12`, `RF-15`) | Modificado | Color por nivel de alerta de los umbrales, gris y opaco sin datos, variables en alerta en el cuadro emergente. | D-42 |
+| 8 | V-04 | Modificado | Solo datos crudos; huecos sin interpolar; indicador de lectura corregida (propuesto). | D-47, D-48, D-53 |
+| 9 | V-14 (`RF-135`, `RF-136`) | Modificado / Agregado | Formato del mensaje al crear la estación; LoRa en fases futuras. | D-25, D-50, I-35 |
+| 10 | V-15, V-16 (`RF-152`) | Modificado | Criterio de desconexión; alerta por marca de tiempo inválida. | D-47, D-48 |
+| 11 | V-27 (`RF-260` a `RF-266`) | Modificado / Agregado | *Formatos del mensaje MQTT*: formatos con nombre asignados a las estaciones, formato de la marca de tiempo y códigos de error. | D-50, I-35 |
+| 12 | V-29 (`RF-280` a `RF-284`) | Retirado | Fuentes de referencia. | D-37, D-52, I-36 |
+| 13 | V-30 (`RF-290` a `RF-297`) | Modificado / Agregado | Calibración según los requisitos recibidos. | D-52, D-53 |
+| 14 | V-31 (`RF-303`, `RF-304`) | Modificado | Por confirmar; origen en estaciones registradas; descarga en lugar de guardar. | D-53 |
+| 15 | V-32 (`RF-310` a `RF-314`) | Retirado | Modelos. | D-53, I-36 |
+| 16 | 5. Reglas de negocio | Modificado / Agregado | `RN-06`, `RN-15`, `RN-16`, `RN-29`, `RN-30`, `RN-31`, `RN-32` modificadas; `RN-33` a `RN-37` agregadas. | D-25, D-42, D-47 a D-53 |
+| 17 | 6. Requisitos no funcionales | Modificado | `RNF-05` (zona horaria de Colombia) y `RNF-11`. | I-38, D-53 |
+| 18 | 7. Puntos abiertos | Modificado / Agregado | `PA-01`, `PA-09`, `PA-31`, `PA-32`, `PA-34`, `PA-50`, `PA-52`, `PA-54` actualizados; `PA-51` aplazado; `PA-53` resuelto; `PA-55` descartado; `PA-56` agregado. | D-25, D-42 a D-53, I-37 |
+
+### Cambios en contextualizacion.md (versión 9 → 10)
+
+| # | Sección | Tipo | Cambio | Motivo |
+|---|---------|------|--------|--------|
+| 1 | 2.3 Trazabilidad | Modificado | Objetivos 2, 3 y 4 ya no señalan la especificación como desactualizada. | GC-008 |
+| 2 | 9. `PC-22` y 9.1 | Modificado | Remisión a `RN-37` y `PA-56`; lista de puntos abiertos actualizada. | GC-008 |
+| 3 | 10. Sugerencias | Modificado | 27 → 25 vistas vigentes. | I-36 |
+
+### Pendientes
+
+- `PA-56`: reglas de detalle de los colores del mapa y color de las estaciones *Inactive*.
+- `PA-52` / `PA-54`: modelos mínimos, estimación de variables, valor p, datos para el R² y formato de los modelos que no son redes neuronales.
+- `PA-50` / `PA-32`: estructura concreta del JSON y matriz de códigos de error.
+
+---
+
+## GC-009 — 2026-10-27 — Cambios, correcciones y respuestas a puntos abiertos
+
+**Origen:** [cambios_correciones_plataforma.md](../cambios_correciones_plataforma.md) (cambios a las secciones 1.2 y 2.1 de la especificación y respuestas a `PA-04`, `PA-30`, `PA-36`, `PA-46` y `PA-49`).
+**Versiones:** plataforma_web_descripcion.md 5 → 6; contextualizacion.md 10 → 11.
+
+### Decisiones
+
+| # | Decisión |
+|---|----------|
+| D-54 | **Gestión de administradores:** un administrador puede registrar, actualizar, listar y eliminar a otros administradores. De aquí nacen vistas nuevas. |
+| D-55 | **Estado *New* de las cuentas:** solo existe durante el registro; la cuenta pasa a *Active* cuando el administrador establece su contraseña con el enlace de activación. |
+| D-56 | **Unidades** (`PA-04`): se revisaron y todas corresponden con la hoja técnica de los sensores. |
+| D-57 | **Estado *Sin datos*** (`PA-30`): las estaciones recién creadas o que no reciben datos del bróker pasan a *Sin datos*. En *Inactive*, *Hidden* y *Deleted* se deja de escuchar o consultar el bróker. |
+| D-58 | **Históricos de estaciones ocultas o eliminadas** (`PA-36`): no se grafican ni se pueden descargar desde el momento en que la estación pasa a *Hidden* o *Deleted*. |
+| D-59 | **Descargas** (`PA-46`): *captcha* para descargar; el archivo se conserva un máximo de 12 horas, se descargue o no; si se genera otro antes, solo se conserva el último; límite de solicitudes y de descargas por IP para usuarios generales y administradores. |
+| D-60 | **Conexión con MQTT** (`PA-49`): se acepta la recomendación de reemplazar el *timeout* y los reintentos por el tiempo máximo sin mensajes de cada estación y por la detección de desconexión o desincronización entre la API y el bróker. |
+
+### Interpretaciones y decisiones derivadas
+
+| # | Interpretación | Dónde queda pendiente |
+|---|----------------|-----------------------|
+| I-40 | Con el estado *New*, quien registra solo define nombre y correo; la contraseña la define el nuevo administrador en una vista nueva de activación (V-36). Se reintroduce un flujo parecido al estado *Pending* descartado en `GC-001` (I-02); `PA-20`, `PA-21` y `PA-39` se anotan. | `PA-48` |
+| I-41 | La gestión de administradores se organiza en V-33 (listado, con acceso al registro V-13), V-34 (edición) y V-35 (eliminación, con la misma anonimización de V-19). Son propuestos: editar nombre y correo, reenviar el enlace de activación, no eliminarse a sí mismo desde V-35, vigencia del enlace de 24 horas y que las cuentas *Deleted* no se listen. | `PA-48` |
+| I-42 | La desconexión por tiempo sin mensajes deja la estación en *NoData* y ya no en *Error*; *Error* queda solo para sensores *Offline*. Al habilitar una estación, queda en *NoData* hasta su primer mensaje. Color propuesto de *NoData*: `#9CA3AF`. | `PA-56` |
+| I-43 | Si la plataforma no escucha a las estaciones *Inactive*, *Hidden* y *Deleted*, no recibe sus datos ni genera alertas sobre ellas: se da por resuelto `PA-35`. | — |
+| I-44 | "No se grafican" se aplicó también a los filtros de las tablas de histórico y a todos los roles; se propone que los datos vuelvan a estar disponibles al mostrar una estación oculta. | `PA-36` |
+| I-45 | El rango `RF-40` a `RF-49` de V-05 está completo, por lo que el *captcha* y los límites se incorporan a `RF-41` y la retención a `RF-48`; la regla se registra en `RN-40`. | `PA-46` |
+| I-46 | "Tiempo máximo sin mensajes por cada estación" se interpreta como un parámetro de V-15 con valor por defecto de 10 minutos (`RN-34`); queda por definir si es único o por estación. `RF-142` se redefine y `RF-143` se retira. La alerta *Reintentos de conexión* pasa a *Desconexión con el bróker*, que no se asocia a una estación. | `PA-25` |
+
+### Cambios en plataforma_web_descripcion.md (versión 5 → 6)
+
+| # | Sección | Tipo | Cambio | Motivo |
+|---|---------|------|--------|--------|
+| 1 | 1.2, 1.3 | Modificado | Rol administrador con gestión de administradores; mapa de navegación con V-33 a V-36; estructura común sin barra lateral en V-36. | D-54, I-41 |
+| 2 | 2.1 Estados de las cuentas | Agregado / Modificado | Estado *New* y nuevas transiciones (activación y eliminación por otro administrador). | D-55, I-40 |
+| 3 | 2.2 Estados de las estaciones | Agregado / Modificado | Estado *NoData*; *Error* solo por sensores *Offline*; las estaciones *Inactive*, *Hidden* y *Deleted* no se escuchan; nueva prioridad de cálculo, transiciones y visibilidad; regla de históricos de estaciones ocultas o eliminadas. | D-57, D-58, I-42, I-44 |
+| 4 | 2.5 Estados de generación de archivos | Modificado | Retención de 12 horas y solo el último archivo por persona. | D-59 |
+| 5 | 2.6 Alertas | Modificado | *Reintentos de conexión* → *Desconexión con el bróker*; *Tiempo sin conexión* con el tiempo máximo sin mensajes. | D-60, I-46 |
+| 6 | 3. Componentes (`C-05` a `C-09`), `RF-G01`, `RF-G03` | Modificado | Uso en V-35 y V-36; estación opcional en la tarjeta de alerta; opción *Administradores* en la barra lateral. | D-54, D-60 |
+| 7 | V-01 (`RF-07`) | Modificado | No se inicia sesión con cuentas *New*. | D-55 |
+| 8 | V-02 (`RF-11`), V-03 | Modificado | Gris y opaco para *NoData*; filtros sin estaciones ocultas ni eliminadas. | D-57, D-58 |
+| 9 | V-05 (`RF-41`, `RF-48`) | Modificado | *Captcha*, límites por IP, retención de 12 horas, filtro de estaciones sin ocultas ni eliminadas. | D-58, D-59, I-45 |
+| 10 | V-07 (`RF-60`, `RF-62`), V-08 (`RF-71`) | Modificado | Dejar de escuchar o volver a escuchar el bróker; *NoData* al habilitar. | D-57 |
+| 11 | V-13 (`RF-120`, `RF-121`, `RF-125`) | Modificado | Pasa a ventana desde V-33; solo nombre y correo; cuenta *New* y enlace de activación. | D-54, D-55 |
+| 12 | V-14 (`RF-133`) | Modificado | La estación recién creada queda en *NoData*. | D-57 |
+| 13 | V-15 (`RF-142`, `RF-143`) | Modificado / Retirado | Tiempo máximo sin mensajes; se retiran los reintentos. | D-60, I-46 |
+| 14 | V-16 (`RF-152`, `RF-153`), V-17, V-19 | Modificado | Alerta de desconexión con el bróker; estación si aplica; anonimización también desde V-35. | D-54, D-60 |
+| 15 | V-33 (`RF-320` a `RF-323`), V-34 (`RF-330` a `RF-332`), V-35 (`RF-340` a `RF-342`), V-36 (`RF-350` a `RF-353`) | Agregado | Administradores, edición y eliminación de administrador, y activación de cuenta. | D-54, D-55, I-41 |
+| 16 | 5. Reglas de negocio | Modificado / Agregado | `RN-06`, `RN-11`, `RN-12`, `RN-15`, `RN-19`, `RN-20`, `RN-34` y `RN-37` modificadas; `RN-38` a `RN-40` agregadas. | D-54 a D-60 |
+| 17 | 6. Requisitos no funcionales | Modificado | `RNF-03` (V-36 pública), `RNF-07` (enlaces de activación) y `RNF-10` (*captcha* y límites también para administradores). | D-55, D-59 |
+| 18 | 7. Puntos abiertos | Modificado | `PA-30`, `PA-35` y `PA-49` resueltos; `PA-36` y `PA-46` resueltos en lo principal; `PA-48` parcial; `PA-02`, `PA-04`, `PA-20`, `PA-21`, `PA-25`, `PA-31` y `PA-39` actualizados. | D-54 a D-60, I-40 a I-46 |
+
+### Cambios en contextualizacion.md (versión 10 → 11)
+
+| # | Sección | Tipo | Cambio | Motivo |
+|---|---------|------|--------|--------|
+| 1 | 1.4 Estaciones | Modificado / Agregado | Desconexión con el tiempo máximo sin mensajes y estado *Sin datos*; estaciones deshabilitadas sin escucha; desconexión de la plataforma con el bróker. | D-57, D-60 |
+| 2 | 2.3 Trazabilidad | Modificado | Objetivo 3: reglas de la exportación. | D-58, D-59 |
+| 3 | 3.1 Incluye | Modificado / Agregado | Detección de desconexiones, suspensión de la escucha, descargas, gestión de administradores con activación, estado *Sin datos* y tiempo máximo sin mensajes. | D-54, D-55, D-57 a D-60 |
+| 4 | 4. Interesados | Modificado | Los administradores gestionan las cuentas de los demás administradores. | D-54 |
+| 5 | 6. Criterios de éxito | Modificado | Criterio 2 con *Sin datos* y la suspensión de la escucha. | D-57 |
+| 6 | 7.1 Costos | Modificado | Retención de archivos, correo de activación y servicio de *captcha*. | D-55, D-59 |
+| 7 | 8. Riesgos | Modificado | `RG-12` con las medidas definidas. | D-59 |
+| 8 | 9. Pendientes, 9.1 | Modificado / Corrección | Rango `PA-01` a `PA-56` (decía `PA-55`); lista de puntos abiertos prioritarios actualizada. | D-57 a D-60 |
+| 9 | 10. Sugerencias | Modificado | 25 → 29 vistas vigentes. | I-41 |
+| 10 | 11. Glosario | Modificado / Agregado | Desconexión modificada; *Sin datos* y enlace de activación agregados. | D-55, D-57 |
+
+### Pendientes
+
+- `PA-48`: primer administrador, ingreso con Microsoft, vigencia del enlace de activación, datos editables de otros administradores y restricciones para eliminarlos.
+- `PA-46`: valores de los límites por IP, rango máximo de fechas o tamaño de archivo, identificación de la persona para conservar su último archivo y servicio de *captcha*.
+- `PA-36`: aplicación de la regla a las tablas, al detalle de una estación oculta y al módulo de calibración.
+- `PA-25`: rango del tiempo máximo sin mensajes y si es único o por estación.
+- `PA-56` (f): color en el mapa de las estaciones *Inactive*, que ya no reciben datos, frente al gris de *NoData*.
