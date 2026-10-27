@@ -31,7 +31,7 @@ Identificadores nuevos que introduce este documento: `ADR-xxx` (decisión de arq
 | Tema | Decisión | Estado |
 |------|----------|--------|
 | Metodología | Scrum adaptado a 2 developers, Sprints de 1 semana, Releases cada 2 Sprints, plantilla Agile de Azure DevOps (`ADR-001`). | Aceptada |
-| Gestión del trabajo y código | Azure Boards para el trabajo; GitHub para el código, en un **monorepo** (`ADR-002`, `ADR-014`). | Aceptada / Propuesta |
+| Gestión del trabajo y código | Azure Boards para el trabajo; **Azure Repos** para el código, en un repositorio **privado** y **monorepo** (`ADR-002`, `ADR-014`). | Aceptada / Propuesta |
 | Ramas | **GitFlow simplificado:** `main` + `develop` + `feature/*` + `hotfix/*`, sin ramas `release/*` salvo que se necesite estabilizar (`ADR-003`). | Propuesta |
 | Arquitectura | **Monolito modular** en contenedores, con procesos separados para API, ingesta MQTT y tareas en segundo plano (`ADR-016`). | Propuesta |
 | Backend | Python 3.12 + FastAPI + SQLAlchemy 2 + Alembic (`ADR-004`). | Propuesta |
@@ -45,7 +45,7 @@ Identificadores nuevos que introduce este documento: `ADR-xxx` (decisión de arq
 
 1. **La Fase 1 termina el 4 de octubre y quedan 4 días.** Los entregables de diseño no caben completos en ese plazo. Se propone cerrar la Fase 1 con una **línea base de planeación** (sección 7.2) y terminar las decisiones de stack como spikes con fecha límite en el Sprint 02 (diseño continuo, propio del enfoque ágil).
 2. **El alcance completo (27 vistas, MQTT, analítica y despliegue) no cabe en 8 Sprints de dedicación parcial** (`RG-07`). Hay que acordar un **producto mínimo (MVP)** con el director antes del 11 de octubre (sección 3.5).
-3. **Falta el objetivo de analítica en Azure DevOps.** La contextualización define 6 objetivos específicos, pero el campo `Objetivo específico` solo llega hasta `OE5`, no hay épica para la calibración (`OE6`) y sigue existiendo el área `PQRS`, que fue retirada (sección 6.1).
+3. **Estructura de Azure DevOps reorganizada** (versión 2 de este documento): una épica por objetivo específico (`OE1`–`OE4`) y Features como funcionalidades validables de la plataforma; reemplaza las épicas `E1`–`E7` y el área `PQRS` (sección 6.1).
 4. **Dependencias externas sin dueño:** el contrato MQTT depende de Ingeniería Electrónica y el ICA, los umbrales y la calibración dependen de Ingeniería Ambiental, cuyo investigador no participa directamente. Se proponen fechas límite y planes alternativos para cada una (sección 10).
 
 ---
@@ -62,7 +62,7 @@ Identificadores nuevos que introduce este documento: `ADR-xxx` (decisión de arq
 | Investigador de Ingeniería Ambiental | Parte del macroproyecto; sin participación directa en el desarrollo | Stakeholder (consultado) | "Investigador 2" |
 | Ingeniería Electrónica | Contraparte del contrato de integración MQTT (`PC-02`) | Stakeholder externo | Sin acceso (se gestiona por Issues) |
 
-**Decisión sobre el Product Owner (Propuesta):** con la información del equipo, el director asume el rol de Product Owner. Esto cierra el pendiente "Product Owner único" de [contexto_azure_devops.md](contexto_azure_devops.md) §11.
+**Decisión sobre el Product Owner (Aceptada):** el director es el único Product Owner, confirmado con los investigadores (`GC-006`, D-44).
 
 **Riesgo de la doble función del director.** El director es a la vez PO (acepta el producto) y evaluador académico (avala el trabajo de grado). Para no mezclar los dos papeles, cada Sprint Review separa explícitamente dos decisiones: la **aceptación de las historias** (como PO) y las **observaciones académicas** (como director), registradas en el acta del Release.
 
@@ -107,11 +107,9 @@ Scrum adaptado, ejecutado con la plantilla **Agile** de Azure DevOps (proceso he
 | Parámetro | Valor |
 |-----------|-------|
 | Duración del Sprint | 1 semana (lunes a domingo; se trabaja de lunes a viernes) |
-| Release | Cada 2 Sprints, con tag de versión en GitHub y acta en la Wiki |
+| Release | Cada 2 Sprints, con tag de versión en Azure Repos y acta en la Wiki |
 | Excepción | El Release 05 tiene un solo Sprint (Sprint 09, 23 al 29 de noviembre) porque la Fase 2 termina el 29 de noviembre |
 | Límite de trabajo en curso | 2 en *En desarrollo* y 2 en *En revisión de código* |
-
-**Ajuste pendiente:** la sección 5 de [contextualizacion.md](contextualizacion.md) todavía dice "iteraciones de dos semanas". Debe actualizarse con un `GC-xxx` para cerrar `PC-11`.
 
 ### 3.2 Cadencia semanal
 
@@ -131,7 +129,7 @@ Cuando el lunes es festivo (12-oct, 2-nov y 16-nov), el Sprint Planning se hace 
 |-----------|-----------|------------|-------------|
 | Product Backlog | Lista priorizada de todo el trabajo | Azure Boards (Epics → Features → User Stories) | Estudiante 1 lo mantiene; el PO prioriza |
 | Sprint Backlog y objetivo del Sprint | Compromiso de la semana | Azure Boards (iteración del Sprint) | Estudiantes |
-| Incremento | Software funcionando y desplegado en el entorno de pruebas | GitHub + entorno `pruebas` | Estudiantes |
+| Incremento | Software funcionando y desplegado en el entorno de pruebas | Azure Repos + entorno `pruebas` | Estudiantes |
 | Definition of Ready / Definition of Done | Criterios de calidad de entrada y salida | Wiki `Acuerdos de trabajo` y sección 3.4 | Estudiantes; avala el PO |
 | Roadmap | Planeación de Releases e hitos | Delivery Plans "Roadmap IDI-FR-05" | Estudiante 1 |
 | Registro de riesgos | Riesgos `RG-xx` con probabilidad, impacto y respuesta | Work item `Riesgo` en Azure Boards | Estudiante 1 |
@@ -141,7 +139,7 @@ Cuando el lunes es festivo (12-oct, 2-nov y 16-nov), el Sprint Planning se hace 
 | Actas | Acuerdos de cada Review de Release y de cada reunión con investigadores | Wiki `Actas/Release-NN` | Scrum Master |
 | Tablero de seguimiento | Burndown, velocidad, flujo acumulado, *cycle time* | Dashboard "Seguimiento del proyecto" | Estudiante 1 |
 | Matriz de trazabilidad | `OE` → `RF` → historia → `CP-xxx` → resultado | `/docs/pruebas/matriz_trazabilidad.md` | Estudiantes |
-| CHANGELOG y tags | Qué cambió en cada versión del software | `CHANGELOG.md` + tags SemVer en GitHub | Estudiantes |
+| CHANGELOG y tags | Qué cambió en cada versión del software | `CHANGELOG.md` + tags SemVer en Azure Repos | Estudiantes |
 
 ### 3.4 Definition of Ready y Definition of Done
 
@@ -215,7 +213,7 @@ Todo cambio de alcance después de la línea base del 4 de octubre sigue este fl
 - **Documentación suficiente (Ambler, 2002; Rüping, 2003):** cada documento existe porque alguien lo necesita (el director, el comité, quien opere la plataforma o el propio equipo).
 - **Un documento, un dueño.** Cada documento tiene un responsable y una fecha de la primera versión.
 
-**Ajuste propuesto sobre los ADR:** [contexto_azure_devops.md](contexto_azure_devops.md) ubica los ADR en la Wiki. Se propone que los ADR vivan en `/docs/adr` del repositorio (se revisan por PR y quedan junto al código que justifican) y que la página `Decisiones de arquitectura` de la Wiki sea un índice con enlaces.
+**Ubicación de los ADR:** los ADR viven en `/docs/adr` del repositorio (se revisan por PR y quedan junto al código que justifican) y la página `Decisiones de arquitectura` de la Wiki es un índice con enlaces ([contexto_azure_devops.md](contexto_azure_devops.md) §8.4).
 
 **Ubicación de los documentos de contexto:** mientras no exista el repositorio, los documentos de requisitos siguen en `context/`. Al crear el repositorio (Sprint 01), se mueven a `/docs/requisitos/` y desde entonces se modifican solo por PR.
 
@@ -294,7 +292,7 @@ docs/
 | ID | Decisión | Estado | Se decide en |
 |----|----------|--------|--------------|
 | `ADR-001` | Scrum adaptado con la plantilla Agile, Sprints de 1 semana y Releases de 2 | Aceptada | — |
-| `ADR-002` | Azure Boards para el trabajo y GitHub para el código | Aceptada | — |
+| `ADR-002` | Azure Boards para el trabajo y Azure Repos (repositorio privado) para el código | Aceptada | — |
 | `ADR-003` | GitFlow simplificado | Propuesta | Sprint 01 |
 | `ADR-004` | Backend en Python 3.12 con FastAPI | Propuesta | Sprint 01 |
 | `ADR-005` | Frontend en React + Vite + TypeScript | Propuesta | Sprint 01 |
@@ -307,7 +305,7 @@ docs/
 | `ADR-012` | Mapas y geocodificación | Abierta | `SPK-07`, Sprint 03 |
 | `ADR-013` | Autenticación y sesiones de administradores | Propuesta | Sprint 04 |
 | `ADR-014` | Monorepo | Propuesta | Sprint 01 |
-| `ADR-015` | Análisis estático de código y visibilidad del repositorio | Abierta | Sprint 01 (depende del director) |
+| `ADR-015` | Análisis estático de código (repositorio privado): SonarQube Cloud en su plan gratuito | Propuesta | Al verificar el límite del plan gratuito |
 | `ADR-016` | Monolito modular con procesos separados | Propuesta | Sprint 01 |
 | `ADR-017` | Proveedor de correo para la recuperación de contraseña | Abierta | Sprint 04 |
 
@@ -319,7 +317,7 @@ Hay tres registros, cada uno para un tipo de cambio:
 |------------|-------------------|---------|
 | Requisitos, alcance y contexto | [gestion_cambios.md](gestion_cambios.md) | `GC-xxx` con origen, decisiones, interpretaciones y cambios por documento (convención vigente) |
 | Decisiones técnicas o de proceso | `/docs/adr/` | Un ADR nuevo; los anteriores no se editan, se marcan como *Reemplazados* |
-| Software | `CHANGELOG.md` + tags de GitHub | *Keep a Changelog* + SemVer, por Release |
+| Software | `CHANGELOG.md` + tags de Azure Repos | *Keep a Changelog* + SemVer, por Release |
 
 ### 4.6 Bitácora de trabajo
 
@@ -334,7 +332,7 @@ Hay tres registros, cada uno para un tipo de cambio:
 
 ### 5.1 Repositorio (`ADR-014`, Propuesta: monorepo)
 
-Un solo repositorio en GitHub, porque la conexión de Azure Boards está limitada a un repositorio, el contrato MQTT se comparte entre el backend y el simulador, y un PR puede cambiar a la vez la API y la vista que la consume.
+Un solo repositorio privado en Azure Repos (`ADR-002`), porque el contrato MQTT se comparte entre el backend y el simulador, y un PR puede cambiar a la vez la API y la vista que la consume. Estar en el mismo proyecto que Boards y Pipelines permite enlazar commits, PR y builds con las historias sin conexiones externas ([contexto_azure_devops.md](contexto_azure_devops.md) §10).
 
 ```
 plataforma-idi-fr-05/
@@ -371,7 +369,7 @@ plataforma-idi-fr-05/
 ├── infra/                        docker-compose, Mosquitto, proxy, scripts de respaldo
 ├── docs/                         sección 4.3
 ├── azure-pipelines.yml
-├── .github/                      PULL_REQUEST_TEMPLATE.md, CODEOWNERS
+├── .azuredevops/                 pull_request_template.md
 ├── .editorconfig
 ├── .gitattributes                * text=auto eol=lf (el equipo trabaja en Windows)
 ├── .pre-commit-config.yaml
@@ -403,7 +401,7 @@ Ejemplo: `feature/123-ingesta-validacion-mensaje`, donde `123` es el ID del work
 - Fusión `develop` → `main`: **merge commit** (conserva el historial del Release), seguido del tag.
 - Se borra la rama después de fusionarla.
 
-**Protección de ramas en GitHub** (`main` y `develop`): PR obligatorio, 1 aprobación, *status checks* del pipeline obligatorios, sin *force push*. **Atención:** GitHub solo aplica las reglas de protección en repositorios **privados** con un plan de pago (Pro o Team). Opciones: hacer público el repositorio, o alojarlo en una cuenta con GitHub Pro (incluido en el GitHub Student Developer Pack). Se decide junto con `ADR-015`.
+**Políticas de rama en Azure Repos** (`main` y `develop`): PR obligatorio con 1 revisor distinto del autor, work item enlazado, comentarios resueltos, tipo de fusión limitado, validación con el pipeline y sin *force push*. Funcionan sin costo en el repositorio privado. El detalle está en [contexto_azure_devops.md](contexto_azure_devops.md) §10.
 
 ### 5.3 Commits
 
@@ -414,17 +412,17 @@ Formato **Conventional Commits** con el ID del work item:
 
 <cuerpo opcional: qué y por qué>
 
-AB#123
+#123
 ```
 
 - **Tipos:** `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `build`, `ci`, `chore`.
 - **Alcances:** `ingesta`, `api`, `web`, `bd`, `simulador`, `analitica`, `infra`, `docs`.
 - Ejemplo: `feat(ingesta): rechazar mensajes con variables no asignadas a la estación`.
-- `Fixes AB#123` en la descripción del PR mueve el work item al fusionar. Como la DoD exige la validación del PO, se recomienda usar `AB#123` (solo enlace) en los PR hacia `develop` y que la historia la cierre el PO.
+- `#123` enlaza el commit con el work item en Azure Repos. Como la DoD exige la validación del PO, en los PR hacia `develop` se deja desmarcado *Complete associated work items after merging* y la historia la cierra el PO.
 
 ### 5.4 Pull requests y revisión de código
 
-- Plantilla en `.github/PULL_REQUEST_TEMPLATE.md` con: work item (`AB#`), qué cambia, cómo probarlo, capturas (si hay interfaz), lista de la DoD.
+- Plantilla en `.azuredevops/pull_request_template.md` con: work item enlazado, qué cambia, cómo probarlo, capturas (si hay interfaz), lista de la DoD.
 - Tamaño recomendado: menos de 400 líneas cambiadas; si es más grande, dividir.
 - El revisor responde en menos de 24 horas hábiles (con WIP 2 en revisión, una revisión lenta bloquea el flujo).
 - Qué revisa: que cumpla los criterios de aceptación, la legibilidad, las pruebas, la seguridad (validación de entradas, permisos en el servidor, secretos) y el rendimiento de las consultas.
@@ -513,88 +511,19 @@ Como *Test Plans* está desactivado (licencia de pago), los casos de prueba (`CP
 
 ## 6. Estrategia de work items en Azure DevOps
 
-### 6.1 Ajustes necesarios a la configuración actual
+### 6.1 Estructura de work items
 
-| # | Hallazgo | Ajuste propuesto |
-|---|----------|------------------|
-| A-01 | El campo `Objetivo específico` de las épicas solo tiene `OE1`–`OE5`, pero la contextualización define el `OE6` (calibración). | Agregar `OE6` a la lista del campo. |
-| A-02 | No hay épica para la analítica y la calibración, que es un objetivo completo del trabajo de grado. | Crear `E7. Analítica de datos y calibración` (`OE6`). |
-| A-03 | Existe el área `PQRS`, retirada en `GC-001` (`D-08`), y no hay área de analítica. | Renombrar el área `PQRS` a `Analítica de datos` (V-29 a V-32). |
-| A-04 | El tipo `Riesgo` registra `RG-01` a `RG-09`, pero la contextualización tiene `RG-01` a `RG-14`. | Registrar `RG-10` a `RG-14` y los nuevos `RG-15` a `RG-19` (sección 9). |
-| A-05 | No hay un tag para los spikes. | Agregar el tag `spike`. |
-| A-06 | El calendario llega hasta el Sprint 08 (22-nov); la Fase 2 termina el 29-nov. | Crear `Release 05` (23-nov al 29-nov) con un solo Sprint: `Sprint 09`. |
-| A-07 | El área `Visualización` no menciona el ICA como Feature propia. | Sin cambio de área; el ICA es una Feature de `E4`. |
+La estructura vigente está en [contexto_azure_devops.md](contexto_azure_devops.md) §8 y no se repite aquí. En resumen:
 
-### 6.2 Épicas
+- **Épica = objetivo específico** (`OE1`–`OE4`, numeración de `GC-004`): `E1` Ciclo de vida y gestión del proyecto, `E2` Integración y gestión de datos de las estaciones, `E3` Consulta pública, acceso y operación de la plataforma, `E4` Calibración y analítica de datos.
+- **Feature = funcionalidad validable** (por ejemplo, *F3.4 Inicio de sesión y recuperación de contraseña* o *F2.3 Administración de estaciones*), con escenarios de validación que el PO aprueba en la Review del Release.
+- **Área = módulo de la plataforma**, para filtrar por módulo a través de las épicas.
 
-| Épica | Objetivo | Área principal | Horizonte |
-|-------|----------|----------------|-----------|
-| E1. Ciclo de vida y gestión del proyecto | OE1 | Gestión y documentación | Todo el proyecto |
-| E2. Levantamiento y validación de requerimientos | OE2 | Requisitos y diseño | Releases 01 a 05 (con mayor carga en 01–02) |
-| E3. Contrato de integración y gestión de datos | OE3 | Ingesta de datos | Releases 01 a 03 |
-| E4. Visualización, ICA y exportación | OE4 | Visualización, Exportación | Releases 02 a 04 |
-| E5. Despliegue, operación y respaldo | OE5 | Infraestructura y DevOps | Releases 01 a 05 |
-| E6. Seguridad, administración y soporte (transversal) | OE3 / OE4 / OE5 | Identidad y acceso, Administración | Releases 03 a 04 |
-| **E7. Analítica de datos y calibración** (nueva) | **OE6** | **Analítica de datos** | Releases 02 a 05 |
+Reemplaza la estructura de la versión 1 de este documento (épicas `E1`–`E7` por los objetivos antiguos y ajustes `A-01` a `A-07`). De esos ajustes siguen vigentes: registrar todos los riesgos `RG-xx`, el tag `spike` y el `Release 05` con el `Sprint 09`.
 
-### 6.3 Features por épica
+### 6.2 y 6.3 (retiradas)
 
-Convención del título: `F<épica>.<n> <nombre>`. Cada Feature tiene *Start Date* y *Target Date* y cabe en un Release. La columna *Release* es la meta propuesta.
-
-| Feature | Vistas o requisitos | Prioridad | Release |
-|---------|---------------------|-----------|---------|
-| **E1** | | | |
-| F1.1 Plan del proyecto y metodología (este documento, ADR de proceso) | `OE1` | Must | R01 |
-| F1.2 Planes de riesgos y de costos a 24 meses | `R-01`, `RG-xx` | Must | R01–R02 |
-| F1.3 Seguimiento, actas y reportes de avance | — | Must | Continuo |
-| F1.4 Documento del trabajo de grado (tag `tesis`) | — | Must | Continuo |
-| F1.5 Cierre, transferencia de conocimiento y entrega final | `RG-04` | Must | R05 |
-| **E2** | | | |
-| F2.1 Línea base de requisitos v5 y MVP aprobado | DOC-03 | Must | R01 |
-| F2.2 Resolución de los puntos abiertos que bloquean el MVP | `PA-30`–`PA-34`, `PA-46`, `PA-49`–`PA-51`, `PC-04` | Must | R01–R02 |
-| F2.3 Mockups de las vistas públicas | V-02 a V-05 | Must | R01–R02 |
-| F2.4 Mockups de las vistas de administración y analítica | V-01, V-06 a V-32 | Should | R02–R03 |
-| F2.5 Validación con usuarios (aceptación y usabilidad) | `RNF-12`, DOC-21 | Must | R04–R05 |
-| **E3** | | | |
-| F3.1 Contrato de integración MQTT v1 acordado con Electrónica | `PC-02`, `PA-50` | Must | R01–R02 |
-| F3.2 Bróker con autenticación, ACL por tópico y TLS | `RNF-09`, `RN-28` | Must | R01–R02 |
-| F3.3 Simulador de estaciones | `S-03` | Must | R01 |
-| F3.4 Ingesta y validación de lecturas | `RN-29`, `PC-09` | Must | R01–R02 |
-| F3.5 Almacenamiento de series de tiempo, agregados y retención | `RNF-04`, `PC-15` | Must | R02 |
-| F3.6 Catálogo de sensores y asignación a estaciones | V-25, V-26 | Must | R02–R03 |
-| F3.7 Estados automáticos de estaciones y sensores | `RN-15`, `RN-16`, `PA-30`, `PA-31` | Must | R03 |
-| F3.8 Formato del mensaje configurable desde la interfaz | V-27 | Should | R04 |
-| **E4** | | | |
-| F4.1 Estructura común: barra lateral, pie de página, diseño adaptable | `C-09`, `C-10`, `RNF-01` | Must | R02 |
-| F4.2 Mapa de estaciones | V-02 | Must | R02 |
-| F4.3 Listado de estaciones con gráficos y tablas | V-03, `C-03`, `C-04` | Must | R02 |
-| F4.4 Detalle de estación con comparación entre sensores | V-04 | Must | R02–R03 |
-| F4.5 Generación de archivos CSV/JSON con límites | V-05, `RNF-10` | Must | R03 |
-| F4.6 Índice de Calidad del Aire | `PC-04` | Must (condicionado) | R03–R04 |
-| **E5** | | | |
-| F5.1 Entorno de desarrollo y contenedores | sección 5.10 | Must | R01 |
-| F5.2 Pipeline de CI | sección 5.6 | Must | R01 |
-| F5.3 Entorno de pruebas desplegado | DoD | Must | R01 |
-| F5.4 Producción: dominio, TLS y despliegue con aprobación | `OE5` | Must | R03 |
-| F5.5 Respaldos automáticos fuera del servidor y restauración probada | `RG-05`, criterio de éxito `OE5` | Must | R03–R04 |
-| F5.6 Monitoreo básico y alertas de costos | `RG-02` | Should | R04 |
-| F5.7 Manual de despliegue y plan de operación a 24 meses | DOC-18, DOC-19 | Must | R04–R05 |
-| **E6** | | | |
-| F6.1 Autenticación y recuperación de contraseña | V-01, V-10, `RNF-07` | Must | R03 |
-| F6.2 Gestión de estaciones | V-06, V-07, V-08, V-14 | Must | R03 |
-| F6.3 Credenciales de estaciones en el bróker | V-28, `C-12`, `RF-134` | Must | R03 |
-| F6.4 Gestión de administradores y perfil | V-13, V-21, V-11, V-12, V-19 | Should / Could | R04 |
-| F6.5 Alertas y su detalle | V-16, V-17 | Should | R04 |
-| F6.6 Configuración del sistema | V-15 | Should | R04 |
-| F6.7 Endurecimiento: límites de frecuencia, cabeceras de seguridad, auditoría | `RNF-03`, `RNF-10` | Must | R04 |
-| F6.8 Estaciones eliminadas | V-18 | Could | R04 |
-| **E7** | | | |
-| F7.1 Diseño experimental de la calibración | DOC-17, `PC-17`, `PC-19` | Must | R02 |
-| F7.2 Prototipo de calibración fuera de la plataforma (RLM vs ANN) | `RN-31` | Must | R02–R03 |
-| F7.3 Fuentes de referencia | V-29 | Should | R03–R04 |
-| F7.4 Entrenamiento y comparación de modelos en la plataforma | V-30, `C-11`, `RNF-11` | Must | R04 |
-| F7.5 Gestión y exportación de modelos | V-32, `PA-54` | Must | R04 |
-| F7.6 Estimación de variables | V-31 | Could | R05 (si hay capacidad) |
+Las épicas y Features de la versión 1 se reemplazan por las de [contexto_azure_devops.md](contexto_azure_devops.md) §8.2.
 
 ### 6.4 User Stories
 
@@ -627,7 +556,7 @@ Convención del título: `F<épica>.<n> <nombre>`. Cada Feature tiene *Start Dat
 ### 6.6 Tags y consultas
 
 - **Tags:** `documentación`, `tesis`, `deuda-técnica`, `bloqueado`, `simulador`, `spike`, `mvp`, `dependencia-externa`.
-- **Consultas compartidas:** "Issues abiertos por responsable y fecha", "Historias bloqueadas", "Riesgos activos por impacto", "Alcance del Release actual" (`Iteration Path Under Release NN`), "Historias sin Requisitos asociados" (control de trazabilidad).
+- **Consultas compartidas:** "Issues abiertos por responsable y fecha", "Historias bloqueadas", "Riesgos activos por impacto", "Alcance del Release actual" (`Iteration Path Under Release NN`), "Historias sin Requisitos asociados" (control de trazabilidad), "Validación de funcionalidades" (Features por área y estado).
 
 ---
 
@@ -657,7 +586,7 @@ Las semanas 1 a 4 fueron anteriores al uso de Sprints en Azure DevOps; se regist
 | ADR | `ADR-001` a `ADR-005`, `ADR-014` y `ADR-016` redactados |
 | Modelo de datos | v0.9: entidades principales y modelo de lecturas |
 | Contrato MQTT | Borrador v0.1 enviado a Ingeniería Electrónica |
-| Repositorio | Creado, con estructura, `CONTRIBUTING.md`, `pre-commit` y protección de ramas |
+| Repositorio | Creado en Azure Repos, con estructura, `CONTRIBUTING.md`, `pre-commit` y políticas de rama |
 | Plan de pruebas | v0.9 |
 | Riesgos | `RG-01` a `RG-19` registrados en Azure Boards |
 | Backlog | Épicas y Features cargadas; historias del Sprint 02 refinadas |
@@ -670,8 +599,8 @@ Las semanas 1 a 4 fueron anteriores al uso de Sprints en Azure DevOps; se regist
 |---------|--------|--------|--------------------------------|-------------------------|
 | **R01** `v0.1.0` | 01 | 28-sep – 4-oct | Línea base de planeación | Sección 7.2 |
 | | 02 | 5-oct – 11-oct | **Esqueleto funcional:** un dato viaja del simulador a la base de datos y se ve en la web, desplegado en `pruebas` | Spikes `SPK-01` a `SPK-04` y sus ADR; `docker-compose`; simulador v0; ingesta mínima; un gráfico en el frontend; pipeline de CI; MVP aprobado; arquitectura v1.0 |
-| **R02** `v0.2.0` | 03 (festivo 12-oct) | 12-oct – 18-oct | Ingesta robusta y modelo de datos definitivo | Validación de mensajes; catálogo de sensores precargado; agregados continuos; mapa (V-02); diseño experimental de la calibración (F7.1) |
-| | 04 | 19-oct – 25-oct | Consulta pública | Listado (V-03) y detalle (V-04) con gráficos y tablas; prueba de carga de gráficos de 2 años; prototipo de calibración con datos simulados o públicos (F7.2). **Demo a los investigadores** |
+| **R02** `v0.2.0` | 03 (festivo 12-oct) | 12-oct – 18-oct | Ingesta robusta y modelo de datos definitivo | Validación de mensajes; catálogo de sensores precargado; agregados continuos; mapa (V-02); diseño experimental de la calibración (F4.1) |
+| | 04 | 19-oct – 25-oct | Consulta pública | Listado (V-03) y detalle (V-04) con gráficos y tablas; prueba de carga de gráficos de 2 años; prototipo de calibración con datos simulados o públicos (F4.3). **Demo a los investigadores** |
 | **R03** `v0.3.0` | 05 | 26-oct – 1-nov | Administración de estaciones | Autenticación (V-01, V-10); crear y editar estaciones (V-14, V-06); credenciales en el bróker (V-28); estados automáticos |
 | | 06 (festivo 2-nov) | 2-nov – 8-nov | Exportación y producción | Exportación CSV/JSON (V-05); deshabilitar y eliminar (V-07, V-08); ICA; **primer despliegue en producción**; respaldos |
 | **R04** `v0.4.0` | 07 | 9-nov – 15-nov | Analítica en la plataforma | Entrenamiento y comparación RLM vs ANN (V-30); modelos y exportación (V-32); fuentes de referencia (V-29) |
@@ -847,10 +776,10 @@ Se suman a `RG-01`–`RG-14` de [contextualizacion.md](contextualizacion.md) §8
 | # | Decisión | Recomendación del equipo |
 |---|----------|--------------------------|
 | 1 | Aprobar este documento como línea base | — |
-| 2 | Confirmar el rol de Product Owner | El director, con la separación de papeles de la sección 1.1 |
+| 2 | ~~Confirmar el rol de Product Owner~~ | **Resuelto:** el director, confirmado con los investigadores (`GC-006`) |
 | 3 | Aprobar el MVP (sección 3.5) | Como está propuesto |
 | 4 | Aceptar el ajuste de la Fase 1 (sección 7.2) | Spikes de stack en el Sprint 02 |
-| 5 | Visibilidad del repositorio (`ADR-015`) | Público, si la UCO lo permite: habilita la protección de ramas y el análisis estático sin costo. Requiere que nunca haya secretos en el repositorio y definir la licencia (`PC-14`). |
+| 5 | ~~Visibilidad del repositorio~~ | **Resuelto:** privado, en Azure Repos (`ADR-002`). Queda la herramienta de análisis estático (`ADR-015`). |
 | 6 | Titular de la cuenta de nube y de los servicios (`PC-07`) | Cuenta institucional o del investigador principal, con los estudiantes como administradores |
 | 7 | Fechas del comité de currículo y formato del entregable (`PC-11`, `PC-12`) | — |
 | 8 | Dedicación semanal esperada de cada estudiante | Para fijar la capacidad (sección 7.5) |
@@ -859,9 +788,9 @@ Se suman a `RG-01`–`RG-14` de [contextualizacion.md](contextualizacion.md) §8
 
 | # | Acción | Responsable sugerido |
 |---|--------|----------------------|
-| 1 | Aplicar los ajustes A-01 a A-06 en Azure DevOps (sección 6.1) | Estudiante 1 |
-| 2 | Crear el repositorio con la estructura de la sección 5.1, `CONTRIBUTING.md`, `pre-commit` y protección de ramas | Estudiante 2 |
-| 3 | Cargar en Azure Boards las épicas, Features (sección 6.3), Issues (`PA`/`PC` del MVP) y riesgos | Estudiante 1 |
+| 1 | Aplicar en Azure DevOps la estructura de la sección 6.1 (picklist `OE1`–`OE4`, áreas por módulo, Release 05) | Estudiante 1 |
+| 2 | Crear el repositorio en Azure Repos con la estructura de la sección 5.1, `CONTRIBUTING.md`, `pre-commit` y políticas de rama | Estudiante 2 |
+| 3 | Cargar en Azure Boards las épicas, Features con sus escenarios de validación ([contexto_azure_devops.md](contexto_azure_devops.md) §8), Issues (`PA`/`PC` del MVP) y riesgos | Estudiante 1 |
 | 4 | Redactar el borrador v0.1 del contrato MQTT y enviarlo a Ingeniería Electrónica | Estudiante 1 |
 | 5 | Redactar la arquitectura v0.9 (C4 de contexto y contenedores) y el modelo de datos v0.9 | Ambos |
 | 6 | Redactar los ADR `001`–`005`, `014` y `016` | Ambos |
@@ -893,7 +822,7 @@ Se suman a `RG-01`–`RG-14` de [contextualizacion.md](contextualizacion.md) §8
 - Rüping, A. (2003). *Agile Documentation*. Wiley.
 - Schwaber, K. y Sutherland, J. (2020). *The Scrum Guide*.
 - Wake, B. (2003). *INVEST in Good Stories, and SMART Tasks*.
-- Documentación oficial consultada para las decisiones abiertas (verificar las condiciones vigentes al decidir): Oracle Cloud *Always Free Resources*; TimescaleDB *Editions* (Apache 2 vs Community); Eclipse Mosquitto *Dynamic Security Plugin*; Apache ECharts; políticas de uso de las teselas de OpenStreetMap y de Nominatim; Azure DevOps (procesos heredados, iteraciones, conexión con GitHub, *parallel jobs*); GitHub (ramas protegidas por plan).
+- Documentación oficial consultada para las decisiones abiertas (verificar las condiciones vigentes al decidir): Oracle Cloud *Always Free Resources*; TimescaleDB *Editions* (Apache 2 vs Community); Eclipse Mosquitto *Dynamic Security Plugin*; Apache ECharts; políticas de uso de las teselas de OpenStreetMap y de Nominatim; Azure DevOps (procesos heredados, iteraciones, políticas de rama de Azure Repos, *parallel jobs*); SonarQube Cloud (plan gratuito para proyectos privados).
 
 ---
 
@@ -902,3 +831,4 @@ Se suman a `RG-01`–`RG-14` de [contextualizacion.md](contextualizacion.md) §8
 | Versión | Fecha | Cambios |
 |---------|-------|---------|
 | 1 | 2026-10-01 | Versión inicial: roles y gobierno, metodología y artefactos, MVP, plan de documentación, flujo de trabajo y normativas, estrategia de work items, cronograma de las Fases 1 y 2, análisis del stack con plan de validación, riesgos `RG-15` a `RG-19` y decisiones pendientes. |
+| 2 | 2026-10-26 | Product Owner único confirmado; repositorio privado en Azure Repos (`ADR-002`) con políticas de rama y enlace de work items por `#id`; `ADR-015` pasa a Propuesta (SonarQube Cloud gratuito); la estructura de work items (sección 6.1 a 6.3) se reemplaza por épicas por objetivo y Features como funcionalidades validables, descrita en [contexto_azure_devops.md](contexto_azure_devops.md) §8 (`GC-006`). |

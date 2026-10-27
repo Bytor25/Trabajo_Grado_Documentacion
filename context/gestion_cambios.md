@@ -6,7 +6,7 @@ Registro de los cambios que se hacen en los documentos del proyecto, con su orig
 
 | Documento | Contenido | Versión vigente |
 |-----------|-----------|:---------------:|
-| [contextualizacion.md](contextualizacion.md) | Contexto, objetivos, alcance, interesados, ciclo de vida, costos, riesgos y pendientes de contexto (`PC-xx`). | 7 |
+| [contextualizacion.md](contextualizacion.md) | Contexto, objetivos, alcance, interesados, ciclo de vida, costos, riesgos y pendientes de contexto (`PC-xx`). | 8 |
 | [plataforma_web_descripcion.md](plataforma_web_descripcion.md) | Especificación funcional: vistas (`V-xx`), componentes (`C-xx`), requisitos (`RF`), reglas de negocio (`RN`), requisitos no funcionales (`RNF`) y puntos abiertos (`PA-xx`). | 4 |
 
 El historial anterior a estas versiones está en la sección *Control de cambios* de cada documento.
@@ -474,3 +474,33 @@ Respuestas propuestas a las dudas que el acta deja abiertas (*Por aclarar*). Se 
 - `PC-17`: quién entrega el documento de analítica y en qué fecha.
 - `PC-22`: reglas de color del mapa.
 - **Especificación (pendiente de actualizar):** V-02 y `RF-11` (color por umbrales, variables en alerta, gris y opaco); sección 2.3 (unidades confirmadas, `PA-04`); V-27 y `RN-29` (marca de tiempo y contrato por estación); sección 2.6 (alerta por marca de tiempo inválida); V-29 y `PA-55` (solo estaciones registradas); `RN-30` y `PA-51` (LoRa en fases futuras); `PA-01` (nombre a cargo del equipo).
+
+---
+
+## GC-006 — 2026-10-26 — Decisiones sobre Azure DevOps y el repositorio
+
+**Origen:** confirmación de los investigadores (Product Owner único) y decisión del equipo (repositorio y estructura de work items).
+**Versiones:** contextualizacion.md 7 → 8. La especificación funcional no se modifica. También se actualizan [contexto_azure_devops.md](contexto_azure_devops.md) y [documento_fundacional.md](documento_fundacional.md) (versión 2), que llevan su propio registro.
+
+### Decisiones
+
+| # | Decisión |
+|---|----------|
+| D-44 | **Product Owner único:** confirmado con los investigadores. El director del proyecto (Investigador 1) es el Product Owner; el Investigador 2 es stakeholder consultado. |
+| D-45 | **Repositorio privado en Azure Repos**, en lugar de GitHub, para manejar en un solo proyecto los pipelines, el análisis de código y el enlace de commits y PR con las historias de usuario. |
+| D-46 | **Estructura de work items:** una épica por objetivo específico (`OE1`–`OE4`) y Features que representan funcionalidades concretas y validables de la plataforma (por ejemplo, inicio de sesión o administración de estaciones), con escenarios de validación que aprueba el Product Owner. Las áreas pasan a organizarse por módulo de la plataforma. |
+
+### Interpretaciones y decisiones derivadas
+
+| # | Interpretación | Dónde queda pendiente |
+|---|----------------|-----------------------|
+| I-28 | La sección 5 ya decía "iteraciones de una semana", pero marcada como propuesta; como `ADR-001` está aceptada, se retira la marca y se agregan los Releases cada dos Sprints. | — |
+| I-29 | Con el repositorio privado, CodeQL deja de ser una opción sin costo; se propone SonarQube Cloud en su plan gratuito, sujeto a verificar su límite de líneas de código (`ADR-015`). | `ADR-015` |
+| I-30 | La nueva estructura responde la preocupación de `PC-21` sobre una estructura enredada, pero debe validarse con el director. | `PC-21` |
+
+### Cambios en contextualizacion.md (versión 7 → 8)
+
+| # | Sección | Tipo | Cambio | Motivo |
+|---|---------|------|--------|--------|
+| 1 | 5. Ciclo de vida | Modificado | "iteraciones de una semana (propuesto)" → "Sprints de una semana y Releases cada dos Sprints". | I-28 |
+| 2 | 9. Pendientes `PC-21` | Modificado | **Parcialmente resuelto:** Product Owner único, épicas por objetivo, Features como funcionalidades validables y repositorio privado en Azure Repos; falta validar con el director. | D-44 a D-46, I-30 |
